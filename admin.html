@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>إدارة مخزون — سوبر ماركت الحمد</title>
+<style>*{box-sizing:border-box;font-family:'Segoe UI',Tahoma,sans-serif}body{margin:0;background:#f6f7f4;color:#1c2a1e}
+header{background:#14532d;color:#fff;padding:16px}header h1{margin:0;font-size:22px}
+.wrap{max-width:1150px;margin:auto;padding:14px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:12px}
+.stat{background:#fff;border-radius:14px;padding:14px;box-shadow:0 1px 5px rgba(0,0,0,.07);text-align:center}.stat b{font-size:24px;color:#14532d;display:block}
+input,select{padding:10px;border:1.5px solid #d1d5db;border-radius:10px;font-size:14px}
+table{width:100%;background:#fff;border-collapse:collapse;border-radius:14px;overflow:hidden;box-shadow:0 1px 5px rgba(0,0,0,.07)}
+th,td{padding:8px;border-bottom:1px solid #eef2ee;text-align:right;font-size:13.5px}th{background:#ecfdf5}
+td input{width:80px;padding:6px}.low{color:#b45309;font-weight:700}.out{color:#b91c1c;font-weight:700}
+.btn{background:#16a34a;color:#fff;border:0;padding:10px 16px;border-radius:10px;cursor:pointer;font-weight:700}.btn.alt{background:#fff;color:#14532d;border:2px solid #16a34a}
+</style></head><body>
+<header><h1>📦 إدارة المخزون والأسعار — سوبر ماركت الحمد</h1><p style="margin:4px 0 0;opacity:.9">عدّل السعر أو الكمية واضغط حفظ — التعديل بيظهر فورًا في واجهة المتجر على نفس الجهاز، وللنشر للكل عدّل ملف products.js على GitHub.</p></header>
+<div class="wrap">
+ <div class="stats">
+  <div class="stat"><b id="sCount">0</b>إجمالي المنتجات</div>
+  <div class="stat"><b id="sValue">0</b>قيمة المخزون (ج.م)</div>
+  <div class="stat"><b id="sLow" style="color:#b45309">0</b>قاربت على النفاد (≤5)</div>
+  <div class="stat"><b id="sOut" style="color:#b91c1c">0</b>نافدة تمامًا</div>
+ </div>
+ <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+  <input id="q" placeholder="بحث بالاسم أو الباركود أو SKU" style="flex:1;min-width:200px" oninput="render()">
+  <select id="f" onchange="render()"><option value="">كل الأقسام</option></select>
+  <button class="btn" onclick="saveAll()">💾 حفظ التعديلات</button>
+  <button class="btn alt" onclick="exportCSV()">⬇️ تصدير CSV (إكسل)</button>
+  <button class="btn alt" onclick="if(confirm('رجوع للبيانات الأصلية؟')){localStorage.removeItem('alhamd_stock');location.reload()}">↩️ استرجاع الأصلي</button>
+  <a class="btn alt" style="text-decoration:none" href="index.html">🛒 واجهة المتجر</a>
+ </div>
+ <div style="overflow:auto"><table><thead><tr><th>SKU</th><th>الباركود</th><th>المنتج</th><th>القسم</th><th>الوحدة</th><th>السعر (ج.م)</th><th>المخزون</th><th>الحالة</th><th>قيمة المخزون</th></tr></thead><tbody id="tb"></tbody></table></div>
+</div>
+<script src="products.js"></script>
+<script>
+const saved=JSON.parse(localStorage.getItem("alhamd_stock")||"{}");
+PRODUCTS.forEach(p=>{if(saved[p.id]){p.stock=saved[p.id].stock;p.price=saved[p.id].price;}});
+const f=document.getElementById("f"); CATEGORIES.forEach(c=>{const o=document.createElement("option");o.textContent=c;f.appendChild(o)});
+function render(){
+ const q=document.getElementById("q").value.trim(), cat=f.value;
+ const list=PRODUCTS.filter(p=>(!cat||p.category===cat)&&(!q||(p.name+p.sku+p.barcode).includes(q)));
+ document.getElementById("tb").innerHTML=list.map(p=>`<tr><td>${p.sku}</td><td>${p.barcode}</td><td><b>${p.name}</b> ${p.brand}<br><small>${p.emoji} ${p.unit}</small></td><td>${p.category}</td><td>${p.unit}</td>
+ <td><input type="number" min="0" value="${p.price}" onchange="upd(${p.id},'price',this.value)"></td>
+ <td><input type="number" min="0" value="${p.stock}" onchange="upd(${p.id},'stock',this.value)"></td>
+ <td class="${p.stock<=0?'out':p.stock<=5?'low':''}">${p.stock<=0?'نافد':p.stock<=5?'قارب النفاد':'متوفر'}</td><td>${p.price*p.stock}</td></tr>`).join("");
+ stats();
+}
+function upd(id,k,v){const p=PRODUCTS.find(x=>x.id===id); p[k]=Math.max(0,+v||0); render();}
+function stats(){ document.getElementById("sCount").textContent=PRODUCTS.length;
+ document.getElementById("sValue").textContent=PRODUCTS.reduce((s,p)=>s+p.price*p.stock,0).toLocaleString("ar-EG");
+ document.getElementById("sLow").textContent=PRODUCTS.filter(p=>p.stock>0&&p.stock<=5).length;
+ document.getElementById("sOut").textContent=PRODUCTS.filter(p=>p.stock<=0).length; }
+function saveAll(){ const o={}; PRODUCTS.forEach(p=>o[p.id]={price:p.price,stock:p.stock}); localStorage.setItem("alhamd_stock",JSON.stringify(o)); alert("اتحفظت التعديلات ✔ هتظهر في واجهة المتجر"); }
+function exportCSV(){ let csv="SKU,الباركود,المنتج,الماركة,القسم,الوحدة,السعر,المخزون,قيمة المخزون\n";
+ PRODUCTS.forEach(p=>csv+=`${p.sku},${p.barcode},"${p.name}","${p.brand}","${p.category}","${p.unit}",${p.price},${p.stock},${p.price*p.stock}\n`);
+ const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob(["\ufeff"+csv],{type:"text/csv"})); a.download="alhamd-inventory.csv"; a.click(); }
+render();
+</script></body></html>

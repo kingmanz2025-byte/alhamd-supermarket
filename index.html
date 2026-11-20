@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>سوبر ماركت الحمد | توصيل لحد باب البيت</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--g:#0e7a3d;--g2:#12a150;--dark:#0b3d22;--bg:#f4f6f4;--ink:#17251b;--mut:#75807a;--line:#e6ebe7;--gold:#f5a623;--red:#e23b3b}
+*{box-sizing:border-box;font-family:'Cairo',Tahoma,sans-serif}
+body{margin:0;background:var(--bg);color:var(--ink)}
+.top{position:sticky;top:0;z-index:50;background:#fff;box-shadow:0 1px 0 var(--line),0 6px 18px rgba(11,61,34,.06)}
+.topin{max-width:1200px;margin:auto;display:flex;align-items:center;gap:14px;padding:12px 16px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink)}
+.logo .mark{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,var(--g),var(--g2));color:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 6px 14px rgba(14,122,61,.35)}
+.logo b{font-size:21px;font-weight:900;line-height:1}.logo small{display:block;color:var(--mut);font-size:11.5px;font-weight:600}
+.search{flex:1;display:flex;background:var(--bg);border:1.5px solid var(--line);border-radius:14px;overflow:hidden}
+.search input{flex:1;border:0;background:transparent;padding:11px 14px;font-size:15px;font-family:inherit;outline:none}
+.search button{border:0;background:var(--g);color:#fff;padding:0 20px;font-weight:800;cursor:pointer;font-family:inherit}
+.cartbtn{position:relative;background:var(--dark);color:#fff;border:0;border-radius:14px;padding:11px 16px;font-weight:800;cursor:pointer;font-family:inherit}
+.cartbtn span{position:absolute;top:-7px;inset-inline-start:-7px;background:var(--gold);color:#402a00;min-width:22px;height:22px;border-radius:999px;font-size:12px;display:flex;align-items:center;justify-content:center;padding:0 5px}
+.strip{background:var(--dark);color:#d9f2e2;font-size:13px}
+.strip .in{max-width:1200px;margin:auto;padding:7px 16px;display:flex;gap:18px;flex-wrap:wrap}
+.hero{max-width:1200px;margin:16px auto 0;padding:0 16px}
+.heroin{background:linear-gradient(120deg,var(--dark),var(--g) 60%,var(--g2));border-radius:22px;color:#fff;padding:26px 24px;display:flex;justify-content:space-between;align-items:center;overflow:hidden}
+.heroin h2{margin:0 0 6px;font-size:27px;font-weight:900}.heroin p{margin:0;opacity:.92;font-size:15px}
+.heroin .big{font-size:74px;filter:drop-shadow(0 10px 16px rgba(0,0,0,.25))}
+.wrap{max-width:1200px;margin:auto;padding:14px 16px}
+.cats{display:flex;gap:14px;overflow-x:auto;padding:10px 2px 4px;scrollbar-width:none}
+.cat{text-align:center;cursor:pointer;min-width:74px}
+.cat .ic{width:62px;height:62px;margin:auto;border-radius:50%;background:#fff;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:27px;transition:.15s}
+.cat small{display:block;margin-top:6px;font-size:12px;font-weight:700;color:#3c4a40;line-height:1.25}
+.cat.on .ic{background:var(--g);border-color:var(--g);box-shadow:0 8px 16px rgba(14,122,61,.3)}
+.sec{display:flex;align-items:center;justify-content:space-between;margin:18px 0 10px}
+.sec h3{margin:0;font-size:19px;font-weight:900}.sec span{color:var(--mut);font-size:13px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:13px}
+.card{background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;transition:.15s}
+.card:hover{transform:translateY(-3px);box-shadow:0 14px 28px rgba(11,61,34,.12)}
+.ph{position:relative;height:138px;background:#eef3ef}
+.ph img{width:100%;height:100%;object-fit:cover;display:block}
+.disc{position:absolute;top:9px;inset-inline-start:9px;background:var(--red);color:#fff;font-size:12px;font-weight:800;padding:3px 9px;border-radius:999px}
+.stk{position:absolute;bottom:9px;inset-inline-start:9px;font-size:11px;font-weight:800;padding:3px 8px;border-radius:999px;background:rgba(255,255,255,.94)}
+.stk.ok{color:var(--g)}.stk.low{color:#9a6a00}.stk.out{color:var(--red)}
+.bd{padding:11px 12px 13px;display:flex;flex-direction:column;gap:3px;flex:1}
+.brand{color:var(--mut);font-size:11.5px;font-weight:700}
+.nm{font-size:14.5px;font-weight:800;line-height:1.4;min-height:40px}
+.unit{color:var(--mut);font-size:12px}
+.stars{color:var(--gold);font-size:12px}
+.pr{margin-top:6px;display:flex;align-items:baseline;gap:7px}
+.pr b{font-size:19px;color:var(--g);font-weight:900}.pr s{color:#a3ada6;font-size:13px}
+.add{margin-top:9px;background:var(--g);color:#fff;border:0;border-radius:12px;padding:10px;font-weight:800;font-size:14.5px;cursor:pointer;font-family:inherit}
+.add:hover{background:var(--g2)}.add:disabled{background:#c3ccc5;cursor:not-allowed}
+.step{margin-top:9px;display:flex;align-items:center;justify-content:space-between;background:#eaf6ee;border:1.5px solid #bfe6cd;border-radius:12px;padding:4px}
+.step button{width:36px;height:34px;border:0;border-radius:9px;background:var(--g);color:#fff;font-size:18px;font-weight:900;cursor:pointer}
+.step b{font-size:16px}
+.pill{position:fixed;bottom:16px;right:50%;transform:translateX(50%);background:var(--dark);color:#fff;border-radius:999px;padding:12px 20px;display:flex;gap:16px;align-items:center;box-shadow:0 16px 34px rgba(0,0,0,.3);z-index:60;border:0;cursor:pointer;font-family:inherit;font-size:15px}
+.pill b{color:#ffd97a}
+.modal{display:none;position:fixed;inset:0;background:rgba(8,30,17,.6);z-index:80;overflow:auto;backdrop-filter:blur(2px)}
+.box{background:#fff;max-width:540px;margin:22px auto;border-radius:22px;padding:20px}
+.box h2{margin:0 0 8px;font-weight:900}
+.box label{font-size:13px;font-weight:700;color:#44524a}
+.box input,.box select,.box textarea{width:100%;padding:11px;margin:4px 0 10px;border:1.5px solid var(--line);border-radius:12px;font-size:15px;font-family:inherit;background:#fbfcfb}
+.row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px dashed var(--line);font-size:14.5px}
+.wa{width:100%;background:#22c15e;color:#fff;border:0;padding:13px;border-radius:14px;font-weight:900;font-size:16px;cursor:pointer;font-family:inherit}
+.ghost{width:100%;background:#fff;color:var(--g);border:1.5px solid var(--g);padding:11px;border-radius:14px;font-weight:800;margin-top:8px;cursor:pointer;font-family:inherit}
+footer{max-width:1200px;margin:26px auto 96px;padding:0 16px;color:var(--mut);font-size:13px;text-align:center}
+footer a{color:var(--g);font-weight:800}
+@media(max-width:640px){.heroin .big{display:none}.logo small{display:none}.grid{grid-template-columns:repeat(auto-fill,minmax(158px,1fr))}}
+</style></head>
+<body>
+<div class="top"><div class="topin">
+ <a class="logo" href="#"><span class="mark">ح</span><span><b>سوبر ماركت الحمد</b><small>طازج كل يوم — توصيل سريع</small></span></a>
+ <div class="search"><input id="q" placeholder="ابحث عن منتج… أرز، جبنة، شيبسي، منظفات"><button onclick="render()">بحث</button></div>
+ <button class="cartbtn" onclick="openCheckout()">السلة <span id="cartCount">0</span></button>
+</div></div>
+<div class="strip"><div class="in"><span>🚚 توصيل 30–60 دقيقة داخل فيصل والهرم</span><span>💵 الدفع عند الاستلام</span><span>📞 اطلب واتساب في أي وقت</span><span>↩️ استبدال فوري لأي منتج فيه مشكلة</span></div></div>
+<div class="hero"><div class="heroin"><div><h2>كل احتياجات البيت… في مكان واحد</h2><p>منتجات السوق المصري بأسعار واضحة وصورة لكل منتج — اطلب ويوصلك لحد باب البيت.</p></div><div class="big">🧺</div></div></div>
+<div class="wrap">
+ <div class="cats" id="chips"></div>
+ <div class="sec"><h3 id="secTitle">كل المنتجات</h3><span id="cnt"></span></div>
+ <div class="grid" id="grid"></div>
+</div>
+<footer>سوبر ماركت الحمد © 2026 — الأسعار بالجنيه المصري وتشمل ضريبة القيمة المضافة حيث تنطبق.<br>إدارة الأسعار والمخزون من <a href="admin.html">لوحة المخزون</a> • خدمة العملاء واتساب من زر تأكيد الطلب داخل السلة.</footer>
+<button class="pill" id="pill" onclick="openCheckout()" style="display:none">🧺 <span id="pillTxt"></span> <b>إتمام الطلب ←</b></button>
+
+<div class="modal" id="modal"><div class="box">
+ <h2>🧺 إتمام الطلب</h2><div id="cartItems"></div>
+ <div class="row"><span>الإجمالي الفرعي</span><b id="subT">0 ج.م</b></div>
+ <h3 style="margin:16px 0 6px">🚚 بيانات التوصيل</h3>
+ <label>الاسم بالكامل</label><input id="cName" placeholder="اسمك">
+ <label>رقم الموبايل</label><input id="cPhone" placeholder="01xxxxxxxxx">
+ <label>منطقة التوصيل</label><select id="cZone" onchange="calc()">
+  <option value="15">فيصل — رسوم توصيل 15 ج.م</option><option value="20">الهرم — رسوم توصيل 20 ج.م</option>
+  <option value="25">الجيزة — رسوم توصيل 25 ج.م</option><option value="40">6 أكتوبر — رسوم توصيل 40 ج.م</option><option value="30">منطقة أخرى — رسوم توصيل 30 ج.م</option></select>
+ <label>العنوان بالتفصيل</label><textarea id="cAddr" rows="2" placeholder="الشارع، رقم العمارة، الدور، علامة مميزة"></textarea>
+ <label>طريقة الدفع</label><select id="cPay"><option>كاش عند الاستلام</option><option>محفظة إلكترونية عند الاستلام</option></select>
+ <label>ملاحظات (اختياري)</label><input id="cNote" placeholder="أي تفاصيل تساعد المندوب">
+ <div class="row" style="font-size:17px;border:0"><span><b>الإجمالي شامل التوصيل</b></span><b id="grandT" style="color:var(--g)">0 ج.م</b></div>
+ <p style="color:var(--mut);font-size:12.5px;margin:4px 0 12px">الحد الأدنى للطلب 50 ج.م — التوصيل خلال 30–60 دقيقة داخل فيصل والهرم.</p>
+ <button class="wa" onclick="sendWhatsApp()">تأكيد الطلب عبر واتساب 📲</button>
+ <button class="ghost" onclick="closeCheckout()">متابعة التسوق</button>
+</div></div>
+
+<script src="products.js"></script>
+<script>
+const CONFIG={whatsapp:"201000000000",storeName:"سوبر ماركت الحمد",minOrder:50};
+const CATEMOJI={"أرز وسكر وبقوليات":"🍚","زيوت وسمن":"🫒","ألبان وأجبان":"🥛","لحوم ودواجن مجمدة":"🍗","خضروات وفاكهة":"🍅","مشروبات وعصائر":"🥤","شاي وقهوة":"☕","معلبات وصلصات":"🥫","مكرونة ودقيق":"🍝","سناكس وحلويات":"🍫","منظفات ومناديل":"🧴","عناية شخصية":"🧼"};
+let cat="الكل", cart=JSON.parse(localStorage.getItem("alhamd_cart")||"{}");
+const saved=JSON.parse(localStorage.getItem("alhamd_stock")||"{}");
+PRODUCTS.forEach(p=>{if(saved[p.id]){p.stock=saved[p.id].stock;p.price=saved[p.id].price;}});
+const chips=document.getElementById("chips");
+["الكل",...CATEGORIES].forEach(c=>{const d=document.createElement("div");d.className="cat"+(c==="الكل"?" on":"");d.innerHTML=`<div class="ic">${c==="الكل"?"🛒":(CATEMOJI[c]||"🛍️")}</div><small>${c}</small>`;d.onclick=()=>{cat=c;document.querySelectorAll(".cat").forEach(x=>x.classList.remove("on"));d.classList.add("on");render()};chips.appendChild(d)});
+document.getElementById("q").addEventListener("input",render);
+function stk(p){if(p.stock<=0)return '<span class="stk out">نفدت الكمية</span>';if(p.stock<=5)return '<span class="stk low">باقي '+p.stock+' فقط</span>';return '<span class="stk ok">متوفر</span>';}
+function ctrl(p){const n=cart[p.id]||0; if(p.stock<=0)return '<button class="add" disabled>غير متوفر حاليًا</button>';
+ if(n>0)return `<div class="step"><button onclick="chg(${p.id},-1)">−</button><b>${n} في السلة</b><button onclick="chg(${p.id},1)">+</button></div>`;
+ return `<button class="add" onclick="chg(${p.id},1)">أضف إلى السلة +</button>`;}
+function render(){
+ const q=document.getElementById("q").value.trim();
+ const list=PRODUCTS.filter(p=>(cat==="الكل"||p.category===cat)&&(!q||(p.name+" "+p.brand+" "+p.category).includes(q)));
+ document.getElementById("secTitle").textContent=cat==="الكل"?"كل المنتجات":cat;
+ document.getElementById("grid").innerHTML=list.map(p=>{const disc=p.oldPrice?Math.round((1-p.price/p.oldPrice)*100):0;const rate=(4.1+((p.id*7)%9)/10).toFixed(1);
+ return `<div class="card"><div class="ph"><img loading="lazy" src="${p.image}" alt="${p.name}" onerror="this.outerHTML='<div style=\\'height:100%;display:flex;align-items:center;justify-content:center;font-size:54px;background:#e7f3ec\\'>${p.emoji}</div>'">${disc?`<span class="disc">خصم ${disc}%</span>`:""}${stk(p)}</div>
+ <div class="bd"><span class="brand">${p.brand} • ${p.category}</span><span class="nm">${p.name}</span><span class="unit">${p.unit}</span><span class="stars">★★★★★ <span style="color:var(--mut)">${rate}</span></span>
+ <div class="pr"><b>${p.price} ج.م</b>${p.oldPrice?`<s>${p.oldPrice} ج.م</s>`:""}</div>${ctrl(p)}</div></div>`}).join("");
+ document.getElementById("cnt").textContent=list.length+" منتج";
+ updateBar();
+}
+function chg(id,d){const p=PRODUCTS.find(x=>x.id===id);cart[id]=(cart[id]||0)+d;if(cart[id]<=0)delete cart[id];if(cart[id]>p.stock)cart[id]=p.stock;localStorage.setItem("alhamd_cart",JSON.stringify(cart));render();const m=document.getElementById("modal");if(m.style.display==="block")renderCart();}
+function totals(){let n=0,t=0;for(const id in cart){const p=PRODUCTS.find(x=>x.id==id);n+=cart[id];t+=cart[id]*p.price;}return{n,t};}
+function updateBar(){const{n,t}=totals();document.getElementById("cartCount").textContent=n;const pill=document.getElementById("pill");if(n){pill.style.display="flex";document.getElementById("pillTxt").innerHTML=`${n} منتج — <b>${t} ج.م</b>`;}else pill.style.display="none";}
+function openCheckout(){renderCart();document.getElementById("modal").style.display="block";}
+function closeCheckout(){document.getElementById("modal").style.display="none";}
+function renderCart(){const box=document.getElementById("cartItems");
+ if(!Object.keys(cart).length)box.innerHTML='<p style="color:var(--mut)">السلة فارغة — أضف منتجات أولًا.</p>';
+ else box.innerHTML=Object.keys(cart).map(id=>{const p=PRODUCTS.find(x=>x.id==id);return `<div class="row"><span>${p.name} <span style="color:var(--mut)">(${p.unit}) — ${p.price} ج.م</span></span><span><button onclick="chg(${id},-1)" style="width:28px;height:28px;border-radius:8px;border:1px solid var(--g);background:#fff;cursor:pointer;font-weight:900">−</button> <b>${cart[id]}</b> <button onclick="chg(${id},1)" style="width:28px;height:28px;border-radius:8px;border:1px solid var(--g);background:#fff;cursor:pointer;font-weight:900">+</button></span><b>${p.price*cart[id]} ج.م</b></div>`}).join("");
+ calc();}
+function calc(){const{t}=totals();const fee=t?+document.getElementById("cZone").value:0;document.getElementById("subT").textContent=t+" ج.م";document.getElementById("grandT").textContent=(t+fee)+" ج.م";}
+function sendWhatsApp(){const{n,t}=totals();if(!n)return alert("السلة فارغة");if(t<CONFIG.minOrder)return alert("الحد الأدنى للطلب "+CONFIG.minOrder+" ج.م");
+ const name=document.getElementById("cName").value.trim(),phone=document.getElementById("cPhone").value.trim(),addr=document.getElementById("cAddr").value.trim();
+ if(!name||!phone||!addr)return alert("كمّل الاسم والموبايل والعنوان عشان التوصيل");
+ const fee=+document.getElementById("cZone").value,zone=document.getElementById("cZone").selectedOptions[0].textContent;
+ let msg="طلب جديد — "+CONFIG.storeName+"%0A----------------%0A";
+ Object.keys(cart).forEach(id=>{const p=PRODUCTS.find(x=>x.id==id);msg+=`• ${p.name} (${p.unit}) × ${cart[id]} = ${p.price*cart[id]} ج.م%0A`;});
+ msg+=`----------------%0Aالإجمالي: ${t} ج.م%0Aالتوصيل (${zone}): ${fee} ج.م%0Aالإجمالي النهائي: ${t+fee} ج.م%0Aالدفع: ${document.getElementById("cPay").value}%0A----------------%0Aالاسم: ${encodeURIComponent(name)}%0Aالموبايل: ${phone}%0Aالعنوان: ${encodeURIComponent(addr)}`;
+ const note=document.getElementById("cNote").value.trim();if(note)msg+=`%0Aملاحظات: ${encodeURIComponent(note)}`;
+ window.open("https://wa.me/"+CONFIG.whatsapp+"?text="+msg,"_blank");}
+render();
+</script></body></html>
