@@ -418,4 +418,14 @@ function drawInvoice(o){const W=760,rowH=36,itemsH=o.items.length*rowH;
 if(SETTINGS.areaName){document.getElementById("delivArea").textContent=SETTINGS.areaName+" فقط 📍";document.getElementById("footArea").textContent=SETTINGS.areaName;}
 document.getElementById("minOrderTxt").textContent=CONFIG.minOrder+" ج.م";document.getElementById("minOrderNote").textContent=CONFIG.minOrder;
 render();
-</script></body></html>
+</script>
+<style>
+#toTop{position:fixed;bottom:86px;inset-inline-start:16px;width:48px;height:48px;border-radius:50%;border:0;background:var(--brand-dark,#004d3c);color:#fff;font-size:22px;font-weight:900;cursor:pointer;box-shadow:0 10px 22px rgba(0,0,0,.28);z-index:70;display:none;align-items:center;justify-content:center}
+#toTop.show{display:flex}
+</style>
+
+<button id="toTop" aria-label="اطلع لفوق" title="اطلع لفوق">↑</button>
+<script>
+(function(){var b=document.getElementById('toTop');function f(){if(window.scrollY>500){b.classList.add('show')}else{b.classList.remove('show')}}window.addEventListener('scroll',f,{passive:true});f();b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});})();
+</script>
+</body></html>

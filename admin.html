@@ -306,4 +306,14 @@ if(sessionStorage.getItem("alhamd_admin_ok")==="1")document.getElementById("pinG
 buildCatSelects();
 loadSettings();
 render();
-</script></body></html>
+</script>
+<style>
+#toTop{position:fixed;bottom:86px;inset-inline-start:16px;width:48px;height:48px;border-radius:50%;border:0;background:var(--brand-dark,#004d3c);color:#fff;font-size:22px;font-weight:900;cursor:pointer;box-shadow:0 10px 22px rgba(0,0,0,.28);z-index:70;display:none;align-items:center;justify-content:center}
+#toTop.show{display:flex}
+</style>
+
+<button id="toTop" aria-label="اطلع لفوق" title="اطلع لفوق">↑</button>
+<script>
+(function(){var b=document.getElementById('toTop');function f(){if(window.scrollY>500){b.classList.add('show')}else{b.classList.remove('show')}}window.addEventListener('scroll',f,{passive:true});f();b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});})();
+</script>
+</body></html>
