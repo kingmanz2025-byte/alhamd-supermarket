@@ -364,7 +364,7 @@ function calc(){const{sub,grand,feeInfo:f}=grandTotal();document.getElementById(
    else if(!sub)h="رسوم التوصيل حسب المسافة — بحد أدنى "+(+SETTINGS.minFee||15)+" ج.م";
    else if(f.noLoc)h="رسوم التوصيل: <b>"+f.fee+" ج.م</b> (الحد الأدنى) — شارك موقعك من الزرار اللي تحت العنوان لحساب الرسوم بالمسافة بالظبط، وسيتم تأكيدها مع الطلب";
    else h="رسوم التوصيل: <b>"+f.fee+" ج.م</b> (الحد الأدنى — موقع المحل لسه مش متظبط، وسيتم تأكيدها مع الطلب)";
-   if(freeAbove>0&&sub>0)h+="<br>💡 أضف منتجات بـ <b>"+(freeAbove-sub)+" ج.م</b> كمان وهيبقى التوصيل مجاني";}
+   if(freeAbove>0&&sub>0)h+="<br>💡 أضف منتجات بـ <b>"+(Math.round((freeAbove-sub)*100)/100)+" ج.م</b> كمان وهيبقى التوصيل مجاني";}
   di.innerHTML=h;}
  const sel=document.getElementById("cPayAmt"),cur=sel.value;sel.innerHTML='<option value="0">المبلغ بالظبط (مش عاوز باقي)</option>'+payOptions(grand).map(v=>'<option value="'+v+'">'+v+' ج.م</option>').join("");if([...sel.options].some(o=>o.value===cur))sel.value=cur;
  const amt=effAmt(),ci=document.getElementById("changeInfo");
@@ -465,7 +465,8 @@ render();
 .cinfo small{color:var(--muted);font-weight:700}
 .cctrl{display:flex;align-items:center;gap:7px;flex-shrink:0}
 .cctrl b{min-width:18px;text-align:center}
-.ctot{flex-shrink:0;min-width:66px;text-align:left;color:var(--brand-dark)}
+.ctot{flex-shrink:0;min-width:66px;text-align:left;color:var(--brand-dark);white-space:nowrap}
+.cctrl{white-space:nowrap}
 .box{position:relative}
 .closeX{position:absolute;top:12px;inset-inline-end:12px;width:38px;height:38px;border-radius:50%;border:1.5px solid var(--line);background:#fff;font-size:17px;cursor:pointer;z-index:5;line-height:1}
 .box h2{padding-inline-end:44px}
