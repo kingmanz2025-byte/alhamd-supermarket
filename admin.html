@@ -118,9 +118,12 @@ small{color:var(--muted)}
    <label>موقع السوبر ماركت — خط العرض (Lat)<input id="stLat" placeholder="مثال: 30.0123"></label>
    <label>موقع السوبر ماركت — خط الطول (Lng)<input id="stLng" placeholder="مثال: 31.2050"></label>
    <label>الرقم السري للوحة التحكم (PIN)<input id="stPin" placeholder="1234"></label>
+   <label>رابط خدمة الطلبات (أرقام فواتير تسلسلية + قاعدة بيانات)<input id="stOrdersApi" placeholder="الصق رابط تطبيق Apps Script هنا"></label>
+   <label>رابط قاعدة بيانات الطلبات (Google Sheets)<input id="stOrdersSheet" placeholder="هيتملا تلقائيًا بعد أول طلب — أو الصقه يدويًا"></label>
   </div>
   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
    <button class="btn" onclick="saveSettings()">💾 حفظ الإعدادات</button>
+   <button class="btn alt" type="button" onclick="if(stOrdersSheet.value){window.open(stOrdersSheet.value,'_blank')}else{alert('رابط قاعدة الطلبات لسه فاضي — هيتملا تلقائيًا بعد أول طلب يعدي على خدمة الطلبات، أو الصقه في خانته فوق')}">📋 فتح قاعدة بيانات الطلبات</button>
    <button class="btn alt" type="button" onclick="useMyLocation()">📍 استخدام موقعي الحالي كموقع السوبر ماركت</button>
    <span id="stMsg" style="align-self:center;font-size:13px;font-weight:700;color:var(--brand)"></span>
   </div>
@@ -173,17 +176,18 @@ small{color:var(--muted)}
  </div>
 </div></div>
 
-<script src="products.js"></script>
+<script src="products.js?v=188"></script>
 <script>
 /* ===== تحميل الكتالوج: نسخة الجهاز المعدّلة (alhamd_catalog) أو المدمجة ===== */
 let CATALOG=null;
 try{const ov=JSON.parse(localStorage.getItem("alhamd_catalog")||"null");
- if(ov&&Array.isArray(ov.products)&&ov.products.length)CATALOG={products:ov.products,categories:(ov.categories&&ov.categories.length?ov.categories:CATEGORIES.slice())};}catch(e){}
+ if(ov&&ov.v!==(window.CATALOG_VERSION||"")){localStorage.removeItem("alhamd_catalog");}
+ else if(ov&&Array.isArray(ov.products)&&ov.products.length)CATALOG={v:ov.v,products:ov.products,categories:(ov.categories&&ov.categories.length?ov.categories:CATEGORIES.slice())};}catch(e){}
 if(!CATALOG){
  const st=JSON.parse(localStorage.getItem("alhamd_stock")||"{}");
  const ps=JSON.parse(JSON.stringify(PRODUCTS));
  ps.forEach(p=>{if(st[p.id]){p.stock=st[p.id].stock;p.price=st[p.id].price;}});
- CATALOG={products:ps,categories:CATEGORIES.slice()};
+ CATALOG={v:(window.CATALOG_VERSION||""),products:ps,categories:CATEGORIES.slice()};
 } else { document.getElementById("ovBadge").style.display="block"; }
 let PRODS=CATALOG.products;
 let viewMode="all";
@@ -288,11 +292,11 @@ function importJSON(input){const file=input.files[0]; if(!file)return;
 function resetCatalog(){if(!confirm("استرجاع الكتالوج الأصلي المدمج؟ كل تعديلات الجهاز هتتمسح."))return;
  localStorage.removeItem("alhamd_catalog"); localStorage.removeItem("alhamd_stock"); location.reload();}
 /* ===== إعدادات المتجر ===== */
-const SETTINGS_DEFAULTS={whatsapp:"201152577222",areaName:"منطقة السوبر ماركت",minOrder:50,minFee:15,includedKm:2,perKm:5,feeCap:"",freeAbove:500,storeLat:"",storeLng:"",pin:"1234"};
+const SETTINGS_DEFAULTS={whatsapp:"201152577222",areaName:"منطقة السوبر ماركت",minOrder:50,minFee:15,includedKm:2,perKm:5,feeCap:"",freeAbove:500,storeLat:"",storeLng:"",pin:"1234",ordersApi:"",ordersSheet:""};
 function getSettings(){return Object.assign({},SETTINGS_DEFAULTS,JSON.parse(localStorage.getItem("alhamd_settings")||"{}"));}
 function loadSettings(){const s=getSettings();
- stWhatsapp.value=s.whatsapp;stArea.value=s.areaName;stMinOrder.value=s.minOrder;stMinFee.value=s.minFee;stIncludedKm.value=s.includedKm;stPerKm.value=s.perKm;stFeeCap.value=s.feeCap;stFreeAbove.value=s.freeAbove;stLat.value=s.storeLat;stLng.value=s.storeLng;stPin.value=s.pin||"1234";}
-function saveSettings(){const s={whatsapp:stWhatsapp.value.trim()||SETTINGS_DEFAULTS.whatsapp,areaName:stArea.value.trim()||SETTINGS_DEFAULTS.areaName,minOrder:+stMinOrder.value||0,minFee:+stMinFee.value||0,includedKm:+stIncludedKm.value||0,perKm:+stPerKm.value||0,feeCap:stFeeCap.value===""?"":+stFeeCap.value,freeAbove:stFreeAbove.value===""?0:+stFreeAbove.value,storeLat:stLat.value.trim(),storeLng:stLng.value.trim(),pin:stPin.value.trim()||"1234"};
+ stWhatsapp.value=s.whatsapp;stArea.value=s.areaName;stMinOrder.value=s.minOrder;stMinFee.value=s.minFee;stIncludedKm.value=s.includedKm;stPerKm.value=s.perKm;stFeeCap.value=s.feeCap;stFreeAbove.value=s.freeAbove;stLat.value=s.storeLat;stLng.value=s.storeLng;stPin.value=s.pin||"1234";stOrdersApi.value=s.ordersApi||"";stOrdersSheet.value=s.ordersSheet||"";}
+function saveSettings(){const s={whatsapp:stWhatsapp.value.trim()||SETTINGS_DEFAULTS.whatsapp,areaName:stArea.value.trim()||SETTINGS_DEFAULTS.areaName,minOrder:+stMinOrder.value||0,minFee:+stMinFee.value||0,includedKm:+stIncludedKm.value||0,perKm:+stPerKm.value||0,feeCap:stFeeCap.value===""?"":+stFeeCap.value,freeAbove:stFreeAbove.value===""?0:+stFreeAbove.value,storeLat:stLat.value.trim(),storeLng:stLng.value.trim(),pin:stPin.value.trim()||"1234",ordersApi:stOrdersApi.value.trim(),ordersSheet:stOrdersSheet.value.trim()};
  localStorage.setItem("alhamd_settings",JSON.stringify(s));stMsg.textContent="اتحفظت الإعدادات ✔ وهتتطبق في واجهة المتجر على نفس الجهاز";}
 function useMyLocation(){if(!navigator.geolocation){stMsg.textContent="الموقع مش متاح على الجهاز ده — اكتب الإحداثيات يدويًا";return;}
  stMsg.textContent="جاري تحديد موقعك…";

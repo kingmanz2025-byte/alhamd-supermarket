@@ -270,7 +270,7 @@ footer td{padding:2px 0 2px 14px}
 </div>
 </div></div>
 
-<script src="products.js?v=187"></script>
+<script src="products.js?v=188"></script>
 <script>
 // ===== إعدادات المحل (عدّل الرقم ده برقم سوبر ماركت الحمد) =====
 const SETTINGS=Object.assign({whatsapp:"201152577222",storeName:"سوبر ماركت الحمد",areaName:"منطقة السوبر ماركت",minOrder:50,minFee:15,includedKm:2,perKm:5,feeCap:"",freeAbove:500,storeLat:"",storeLng:"",ordersApi:"",ordersSheet:""},JSON.parse(localStorage.getItem("alhamd_settings")||"{}"));
@@ -280,7 +280,8 @@ const CATEMOJI={"أرز وسكر وبقوليات":"🍚","زيوت وسمن":"�
 let cat="الكل", filter="all", cart=JSON.parse(localStorage.getItem("alhamd_cart")||"{}");
 // كتالوج لوحة التحكم المعدّل على نفس الجهاز (alhamd_catalog) يتقدّم على الكتالوج المدمج
 try{const _ov=JSON.parse(localStorage.getItem("alhamd_catalog")||"null");
-if(_ov&&Array.isArray(_ov.products)&&_ov.products.length){PRODUCTS.length=0;_ov.products.forEach(p=>PRODUCTS.push(p));
+if(_ov&&_ov.v!==(window.CATALOG_VERSION||"")){localStorage.removeItem("alhamd_catalog");}
+else if(_ov&&Array.isArray(_ov.products)&&_ov.products.length){PRODUCTS.length=0;_ov.products.forEach(p=>PRODUCTS.push(p));
 if(Array.isArray(_ov.categories)&&_ov.categories.length){CATEGORIES.length=0;_ov.categories.forEach(c=>CATEGORIES.push(c));}}}catch(e){}
 const saved=JSON.parse(localStorage.getItem("alhamd_stock")||"{}");
 PRODUCTS.forEach(p=>{if(saved[p.id]){p.stock=saved[p.id].stock;p.price=saved[p.id].price;}});
