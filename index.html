@@ -275,7 +275,7 @@ footer td{padding:2px 0 2px 14px}
 const SETTINGS=Object.assign({whatsapp:"201152577222",storeName:"سوبر ماركت الحمد",areaName:"منطقة السوبر ماركت",minOrder:50,minFee:15,includedKm:2,perKm:5,feeCap:"",freeAbove:500,storeLat:"",storeLng:"",ordersApi:"",ordersSheet:""},JSON.parse(localStorage.getItem("alhamd_settings")||"{}"));
 SETTINGS.storeName="سوبر ماركت الحمد";
 const CONFIG={whatsapp:SETTINGS.whatsapp||"201152577222", storeName:SETTINGS.storeName, minOrder:+SETTINGS.minOrder||50};
-const CATEMOJI={"أرز وسكر وبقوليات":"🍚","زيوت وسمن":"🫒","ألبان وأجبان":"🥛","مجمدات":"🧊","مشروبات وعصائر":"🥤","شاي وقهوة":"☕","معلبات وصلصات":"🥫","مكرونة ودقيق":"🍝","سناكس وحلويات":"🍫","منظفات ومناديل":"🧴","عناية شخصية":"🧼"};
+const CATEMOJI={"أرز وسكر وبقوليات":"🍚","زيوت وسمن":"🫒","ألبان وأجبان":"🥛","مجمدات":"🧊","مشروبات وعصائر":"🥤","شاي وقهوة":"☕","معلبات وصلصات":"🥫","مكرونة ودقيق":"🍝","سناكس وحلويات":"🍫","منظفات ومناديل":"🧴","عناية شخصية":"🧼","إندومي ونودلز":"🍜","حفاضات وأطفال":"🧷"};
 let cat="الكل", filter="all", cart=JSON.parse(localStorage.getItem("alhamd_cart")||"{}");
 // كتالوج لوحة التحكم المعدّل على نفس الجهاز (alhamd_catalog) يتقدّم على الكتالوج المدمج
 try{const _ov=JSON.parse(localStorage.getItem("alhamd_catalog")||"null");
