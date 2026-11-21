@@ -287,6 +287,25 @@ PRODUCTS.forEach(p=>{if(saved[p.id]){p.stock=saved[p.id].stock;p.price=saved[p.i
 const chips=document.getElementById("chips");
 ["الكل",...CATEGORIES].forEach(c=>{const b=document.createElement("button");b.className="cat"+(c==="الكل"?" on":"");b.innerHTML=`<span class="ic">${c==="الكل"?"🛒":(CATEMOJI[c]||"🛍️")}</span><small>${c}</small>`;b.onclick=()=>{cat=c;document.querySelectorAll(".cat").forEach(x=>x.classList.remove("on"));b.classList.add("on");render()};chips.appendChild(b)});
 document.getElementById("q").addEventListener("input",render);
+/* ===== اقتراحات البحث: منتجات متشابهة أثناء الكتابة ===== */
+const qEl=document.getElementById("q");
+const sug=document.createElement("div");sug.id="suggest";
+sug.style.cssText="position:fixed;display:none;background:#fff;border:1px solid #e3e8e3;border-radius:14px;box-shadow:0 18px 34px rgba(0,0,0,.18);z-index:95;max-height:330px;overflow:auto;padding:6px";
+document.body.appendChild(sug);
+function showSuggest(){
+ const q=qEl.value.trim();if(q.length<1){sug.style.display="none";return;}
+ const hits=PRODUCTS.filter(p=>(p.name+" "+p.brand+" "+p.category).includes(q)).slice(0,8);
+ if(!hits.length){sug.style.display="none";return;}
+ const r=qEl.getBoundingClientRect();
+ sug.style.top=(r.bottom+6)+"px";sug.style.left=r.left+"px";sug.style.width=r.width+"px";
+ sug.innerHTML=hits.map(p=>'<div class="sgi" data-n="'+p.name.replace(/"/g,"&quot;")+'" style="display:flex;align-items:center;gap:10px;padding:7px 8px;border-radius:10px;cursor:pointer"><img src="'+p.image+'" alt="" style="width:38px;height:38px;object-fit:contain;border-radius:8px;background:#f6f8f6"><span style="flex:1;font-weight:700;font-size:14px">'+p.name+' <small style="color:#8a9a8d">'+p.unit+'</small></span><b style="color:#004d3c;white-space:nowrap">'+p.price+' ج.م</b></div>').join("");
+ sug.style.display="block";
+ sug.querySelectorAll(".sgi").forEach(el=>el.addEventListener("mousedown",e=>{e.preventDefault();qEl.value=el.dataset.n;sug.style.display="none";render();window.scrollTo({top:document.getElementById("grid").offsetTop-140,behavior:"smooth"});}));
+}
+qEl.addEventListener("input",showSuggest);
+qEl.addEventListener("focus",showSuggest);
+document.addEventListener("click",e=>{if(!sug.contains(e.target)&&e.target!==qEl)sug.style.display="none";});
+window.addEventListener("scroll",()=>{if(sug.style.display==="block")showSuggest();},{passive:true});
 function setFilter(f){filter=f;["fAll","fOffer","fAvail"].forEach(id=>document.getElementById(id).classList.remove("on"));document.getElementById(f==="all"?"fAll":f==="offer"?"fOffer":"fAvail").classList.add("on");render();}
 function stk(p){if(p.stock<=0)return '<span class="stk out">نفدت الكمية</span>';if(p.stock<=5)return '<span class="stk low">باقي '+p.stock+' فقط</span>';return '<span class="stk ok">متوفر</span>';}
 function ctrl(p){const n=cart[p.id]||0; if(p.stock<=0)return '<button class="add" disabled>غير متوفر حاليًا</button>';
