@@ -250,8 +250,9 @@ footer td{padding:2px 0 2px 14px}
  <button type="button" class="ghost" style="margin:2px 0 4px" onclick="getLocation()">📍 إرسال موقعي الحالي</button>
  <p class="note" id="locStatus" style="margin:0 0 10px">الموقع بيساعد المندوب يوصل أسرع — اختياري، والطلب بيكمل بالعنوان المكتوب بس لو مش متاح.</p>
  <label>طريقة الدفع</label><select id="cPay"><option>كاش عند الاستلام</option><option>محفظة إلكترونية عند الاستلام</option></select>
- <label>هتدفع كام؟</label><select id="cPayAmt" onchange="calc()">
-  <option value="0">المبلغ بالظبط (مش عاوز باقي)</option><option value="100">100 ج.م</option><option value="200">200 ج.م</option><option value="500">500 ج.م</option><option value="1000">1000 ج.م</option></select>
+ <label>هتدفع كام؟</label><select id="cPayAmt" onchange="document.getElementById('cPayCustom').value='';calc()">
+  <option value="0">المبلغ بالظبط (مش عاوز باقي)</option></select>
+ <label>أو اكتب المبلغ بنفسك (ج.م)</label><input id="cPayCustom" type="number" min="0" placeholder="مثال: اكتب الرقم اللي هتدفعه بايدك" oninput="calc()">
  <p class="note" id="changeInfo" style="margin:0 0 10px"></p>
  <label>ملاحظات (اختياري)</label><input id="cNote" placeholder="أي تفاصيل تساعد المندوب">
  <div class="row" style="font-size:17px;border:0"><span><b>الإجمالي شامل التوصيل</b></span><b id="grandT" style="color:var(--brand)">0 ج.م</b></div>
@@ -328,7 +329,9 @@ function calcFee(sub){const minFee=+SETTINGS.minFee||15,freeAbove=+SETTINGS.free
   return{fee,dist,free:false,estimated:false,noLoc:false};}
  return{fee:minFee,dist:null,free:false,estimated:true,noLoc:!custLoc};}
 function grandTotal(){const{t}=totals();const f=calcFee(t);return{sub:t,fee:f.fee,grand:t+f.fee,feeInfo:f};}
-function changeCalc(){const{grand}=grandTotal();const amt=+document.getElementById("cPayAmt").value;
+function payOptions(grand){const steps=[50,100,200,500,1000],out=[];steps.forEach(s=>{let v=Math.ceil(grand/s)*s;if(v<=grand)v+=s;if(!out.includes(v))out.push(v);});return out.slice(0,4);}
+function effAmt(){const c=+document.getElementById("cPayCustom").value;if(c>0)return c;return +document.getElementById("cPayAmt").value;}
+function changeCalc(){const{grand}=grandTotal();const amt=effAmt();
  if(!amt)return{pay:0,change:0,text:"هيدفع بالظبط — لا يوجد باقي"};
  if(amt<grand)return{pay:amt,change:null,text:""};
  return{pay:amt,change:amt-grand,text:`العميل هيدفع: ${amt} ج.م — الباقي المطلوب تجهيزه: ${amt-grand} ج.م`};}
@@ -342,7 +345,8 @@ function calc(){const{sub,grand,feeInfo:f}=grandTotal();document.getElementById(
    else h="رسوم التوصيل: <b>"+f.fee+" ج.م</b> (الحد الأدنى — موقع المحل لسه مش متظبط، وسيتم تأكيدها مع الطلب)";
    if(freeAbove>0&&sub>0)h+="<br>💡 أضف منتجات بـ <b>"+(freeAbove-sub)+" ج.م</b> كمان وهيبقى التوصيل مجاني";}
   di.innerHTML=h;}
- const amt=+document.getElementById("cPayAmt").value,ci=document.getElementById("changeInfo");
+ const sel=document.getElementById("cPayAmt"),cur=sel.value;sel.innerHTML='<option value="0">المبلغ بالظبط (مش عاوز باقي)</option>'+payOptions(grand).map(v=>'<option value="'+v+'">'+v+' ج.م</option>').join("");if([...sel.options].some(o=>o.value===cur))sel.value=cur;
+ const amt=effAmt(),ci=document.getElementById("changeInfo");
  if(!amt){ci.textContent="";ci.style.color="";}
  else if(amt<grand){ci.textContent="⚠️ المبلغ اللي اخترته أقل من إجمالي الطلب ("+grand+" ج.م) — اختار مبلغ أكبر أو «المبلغ بالظبط».";ci.style.color="var(--danger)";}
  else{ci.textContent="الباقي اللي هيتجهز لك: "+(amt-grand)+" ج.م";ci.style.color="var(--brand)";}}
@@ -386,7 +390,7 @@ function confirmOrder(){const{n,t}=totals();if(!n)return alert("السلة فا�
   .then(function(r){return r.json();}).then(function(j){if(j&&j.ok){lastOrder.no=j.number;if(j.sheetUrl){try{var s=JSON.parse(localStorage.getItem("alhamd_settings")||"{}");s.ordersSheet=j.sheetUrl;localStorage.setItem("alhamd_settings",JSON.stringify(s));}catch(e){}}}else{lastOrder.no="محلي-"+Date.now();}buildAndShow();})
   .catch(function(){lastOrder.no="محلي-"+Date.now();buildAndShow();});
  } else { lastOrder.no="INV-"+Date.now(); buildAndShow(); }}
-function openWhatsApp(){if(lastMsg)window.open("https://wa.me/"+CONFIG.whatsapp+"?text="+lastMsg,"_blank");}
+function openWhatsApp(){if(!lastMsg)return;window.open("https://wa.me/"+CONFIG.whatsapp+"?text="+lastMsg,"_blank");setTimeout(function(){newOrder();},700);}
 function newOrder(){cart={};localStorage.setItem("alhamd_cart","{}");custLoc=null;lastOrder=null;lastMsg="";
  document.getElementById("successView").style.display="none";document.getElementById("formView").style.display="block";
  const ls=document.getElementById("locStatus");ls.textContent="الموقع بيساعد المندوب يوصل أسرع — اختياري، والطلب بيكمل بالعنوان المكتوب بس لو مش متاح.";ls.style.color="";
