@@ -238,6 +238,7 @@ footer td{padding:2px 0 2px 14px}
 <div class="toast" id="toast">اتضاف للسلة ✅</div>
 
 <div class="modal" id="modal"><div class="box">
+<button class="closeX" onclick="closeCheckout()" aria-label="إغلاق">✕</button>
 <div id="formView">
  <h2>🧺 إتمام الطلب</h2><div id="cartItems"></div>
  <div class="row"><span>الإجمالي الفرعي</span><b id="subT">0 ج.م</b></div>
@@ -336,7 +337,7 @@ function closeCheckout(){document.getElementById("modal").style.display="none";}
 document.getElementById("modal").addEventListener("click",e=>{if(e.target.id==="modal")closeCheckout();});
 function renderCart(){const box=document.getElementById("cartItems");
  if(!Object.keys(cart).length)box.innerHTML='<p style="color:var(--muted);font-weight:700">السلة فارغة — أضف منتجات أولًا.</p>';
- else box.innerHTML=Object.keys(cart).map(id=>{const p=PRODUCTS.find(x=>x.id==id);if(!p)return "";return `<div class="row"><span>${p.name} <span style="color:var(--muted)">(${p.unit}) — ${p.price} ج.م</span></span><span><button class="qbtn" onclick="chg(${id},-1)">−</button> <b>${cart[id]}</b> <button class="qbtn" onclick="chg(${id},1)">+</button></span><b>${p.price*cart[id]} ج.م</b></div>`}).join("");
+ else box.innerHTML=Object.keys(cart).map(id=>{const p=PRODUCTS.find(x=>x.id==id);if(!p)return "";return `<div class="citem"><div class="cinfo"><b>${p.name}</b><small>${p.unit} — ${p.price} ج.م</small></div><div class="cctrl"><button class="qbtn" onclick="chg(${id},-1)">−</button><b>${cart[id]}</b><button class="qbtn" onclick="chg(${id},1)">+</button></div><b class="ctot">${p.price*cart[id]} ج.م</b></div>`}).join("");
  calc();}
 function haversineKm(a,b,c,d){const R=6371,t=Math.PI/180;const h=Math.sin((c-a)*t/2)**2+Math.cos(a*t)*Math.cos(c*t)*Math.sin((d-b)*t/2)**2;return 2*R*Math.asin(Math.sqrt(h));}
 function calcFee(sub){const minFee=+SETTINGS.minFee||15,freeAbove=+SETTINGS.freeAbove||0;
@@ -457,6 +458,18 @@ render();
 </style>
 
 <a href="https://wa.me/201152577222?text=%D8%A3%D9%87%D9%84%D9%8B%D8%A7%20%D8%B3%D9%88%D8%A8%D8%B1%20%D9%85%D8%A7%D8%B1%D9%83%D8%AA%20%D8%A7%D9%84%D8%AD%D9%85%D8%AF%D8%8C%20%D8%B9%D9%86%D8%AF%D9%8A%20%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1" target="_blank" aria-label="راسلنا واتساب" title="راسلنا واتساب" style="position:fixed;bottom:86px;inset-inline-end:16px;width:52px;height:52px;border-radius:50%;background:#25d366;color:#fff;font-size:24px;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 10px 22px rgba(0,0,0,.3);z-index:70">💬</a>
+<style>
+.citem{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line)}
+.cinfo{flex:1;min-width:0}
+.cinfo b{display:block;font-size:14.5px;line-height:1.5;font-weight:800}
+.cinfo small{color:var(--muted);font-weight:700}
+.cctrl{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.cctrl b{min-width:18px;text-align:center}
+.ctot{flex-shrink:0;min-width:66px;text-align:left;color:var(--brand-dark)}
+.box{position:relative}
+.closeX{position:absolute;top:12px;inset-inline-end:12px;width:38px;height:38px;border-radius:50%;border:1.5px solid var(--line);background:#fff;font-size:17px;cursor:pointer;z-index:5;line-height:1}
+.box h2{padding-inline-end:44px}
+</style>
 <button id="toTop" aria-label="اطلع لفوق" title="اطلع لفوق">↑</button>
 <script>
 (function(){var b=document.getElementById('toTop');function f(){if(window.scrollY>500){b.classList.add('show')}else{b.classList.remove('show')}}window.addEventListener('scroll',f,{passive:true});f();b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});})();
