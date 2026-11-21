@@ -330,14 +330,14 @@ function render(){
  updateBar();
 }
 function chg(id,d){const p=PRODUCTS.find(x=>x.id===id);cart[id]=(cart[id]||0)+d;if(cart[id]<=0)delete cart[id];if(cart[id]>p.stock)cart[id]=p.stock;localStorage.setItem("alhamd_cart",JSON.stringify(cart));if(d>0)toast();render();if(document.getElementById("modal").style.display==="block")renderCart();}
-function totals(){let n=0,t=0;for(const id in cart){const p=PRODUCTS.find(x=>x.id==id);if(!p)continue;n+=cart[id];t+=cart[id]*p.price;}return{n,t};}
+function totals(){let n=0,t=0;for(const id in cart){const p=PRODUCTS.find(x=>x.id==id);if(!p)continue;n+=cart[id];t+=cart[id]*p.price;}return{n,t:Math.round(t*100)/100};}
 function updateBar(){const{n,t}=totals();document.getElementById("cartCount").textContent=n;const pill=document.getElementById("pill");if(n){pill.style.display="flex";document.getElementById("pillTxt").innerHTML=`${n} منتج — ${t} ج.م`;}else pill.style.display="none";}
 function openCheckout(){document.getElementById("successView").style.display="none";document.getElementById("formView").style.display="block";renderCart();document.getElementById("modal").style.display="block";}
 function closeCheckout(){document.getElementById("modal").style.display="none";}
 document.getElementById("modal").addEventListener("click",e=>{if(e.target.id==="modal")closeCheckout();});
 function renderCart(){const box=document.getElementById("cartItems");
  if(!Object.keys(cart).length)box.innerHTML='<p style="color:var(--muted);font-weight:700">السلة فارغة — أضف منتجات أولًا.</p>';
- else box.innerHTML=Object.keys(cart).map(id=>{const p=PRODUCTS.find(x=>x.id==id);if(!p)return "";return `<div class="citem"><div class="cinfo"><b>${p.name}</b><small>${p.unit} — ${p.price} ج.م</small></div><div class="cctrl"><button class="qbtn" onclick="chg(${id},-1)">−</button><b>${cart[id]}</b><button class="qbtn" onclick="chg(${id},1)">+</button></div><b class="ctot">${p.price*cart[id]} ج.م</b></div>`}).join("");
+ else box.innerHTML=Object.keys(cart).map(id=>{const p=PRODUCTS.find(x=>x.id==id);if(!p)return "";return `<div class="citem"><b class="cname">${p.name}</b><div class="crow2"><small>${p.unit} — ${p.price} ج.م</small><div class="cctrl"><button class="qbtn" onclick="chg(${id},-1)">−</button><b>${cart[id]}</b><button class="qbtn" onclick="chg(${id},1)">+</button></div><b class="ctot">${Math.round(p.price*cart[id]*100)/100} ج.م</b></div></div>`}).join("");
  calc();}
 function haversineKm(a,b,c,d){const R=6371,t=Math.PI/180;const h=Math.sin((c-a)*t/2)**2+Math.cos(a*t)*Math.cos(c*t)*Math.sin((d-b)*t/2)**2;return 2*R*Math.asin(Math.sqrt(h));}
 function calcFee(sub){const minFee=+SETTINGS.minFee||15,freeAbove=+SETTINGS.freeAbove||0;
@@ -349,13 +349,13 @@ function calcFee(sub){const minFee=+SETTINGS.minFee||15,freeAbove=+SETTINGS.free
   const cap=parseFloat(SETTINGS.feeCap);if(isFinite(cap)&&cap>0)fee=Math.min(fee,cap);
   return{fee,dist,free:false,estimated:false,noLoc:false};}
  return{fee:minFee,dist:null,free:false,estimated:true,noLoc:!custLoc};}
-function grandTotal(){const{t}=totals();const f=calcFee(t);return{sub:t,fee:f.fee,grand:t+f.fee,feeInfo:f};}
+function grandTotal(){const{t}=totals();const f=calcFee(t);return{sub:t,fee:f.fee,grand:Math.round((t+f.fee)*100)/100,feeInfo:f};}
 function payOptions(grand){const steps=[50,100,200,500,1000],out=[];steps.forEach(s=>{let v=Math.ceil(grand/s)*s;if(v<=grand)v+=s;if(!out.includes(v))out.push(v);});return out.slice(0,4);}
 function effAmt(){const c=+document.getElementById("cPayCustom").value;if(c>0)return c;return +document.getElementById("cPayAmt").value;}
 function changeCalc(){const{grand}=grandTotal();const amt=effAmt();
  if(!amt)return{pay:0,change:0,text:"هيدفع بالظبط — لا يوجد باقي"};
  if(amt<grand)return{pay:amt,change:null,text:""};
- return{pay:amt,change:amt-grand,text:`العميل هيدفع: ${amt} ج.م — الباقي المطلوب تجهيزه: ${amt-grand} ج.م`};}
+ return{pay:amt,change:amt-grand,text:`العميل هيدفع: ${amt} ج.م — الباقي المطلوب تجهيزه: ${Math.round((amt-grand)*100)/100} ج.م`};}
 function calc(){const{sub,grand,feeInfo:f}=grandTotal();document.getElementById("subT").textContent=sub+" ج.م";document.getElementById("grandT").textContent=grand+" ج.م";
  const di=document.getElementById("delivInfo"),freeAbove=+SETTINGS.freeAbove||0;
  if(di){let h="";
@@ -370,7 +370,7 @@ function calc(){const{sub,grand,feeInfo:f}=grandTotal();document.getElementById(
  const amt=effAmt(),ci=document.getElementById("changeInfo");
  if(!amt){ci.textContent="";ci.style.color="";}
  else if(amt<grand){ci.textContent="⚠️ المبلغ اللي اخترته أقل من إجمالي الطلب ("+grand+" ج.م) — اختار مبلغ أكبر أو «المبلغ بالظبط».";ci.style.color="var(--danger)";}
- else{ci.textContent="الباقي اللي هيتجهز لك: "+(amt-grand)+" ج.م";ci.style.color="var(--brand)";}}
+ else{ci.textContent="الباقي اللي هيتجهز لك: "+(Math.round((amt-grand)*100)/100)+" ج.م";ci.style.color="var(--brand)";}}
 let custLoc=null, lastOrder=null, lastMsg="";
 function getLocation(){const st=document.getElementById("locStatus");
  if(!navigator.geolocation){st.textContent="الموقع مش متاح على الجهاز ده — كمّل بالعنوان المكتوب.";return;}
@@ -391,7 +391,7 @@ function confirmOrder(){const{n,t}=totals();if(!n)return alert("السلة فا�
  else if(f.dist!=null){deliveryMsg="التوصيل (المسافة التقريبية "+f.dist.toFixed(1)+" كم): "+fee+" ج.م";invLabel="التوصيل (مسافة تقريبية "+f.dist.toFixed(1)+" كم)";invValue=fee+" ج.م";}
  else if(f.noLoc){deliveryMsg="التوصيل: "+fee+" ج.م — الموقع لم يُشارك — رسوم التوصيل بالحد الأدنى وسيتم تأكيدها";invLabel="التوصيل (الحد الأدنى — للتأكيد)";invValue=fee+" ج.م";}
  else{deliveryMsg="التوصيل: "+fee+" ج.م (بالحد الأدنى — سيتم تأكيدها مع الطلب)";invLabel="التوصيل (الحد الأدنى — للتأكيد)";invValue=fee+" ج.م";}
- const items=Object.keys(cart).map(id=>{const p=PRODUCTS.find(x=>x.id==id);return{name:p.name,unit:p.unit,qty:cart[id],price:p.price,total:p.price*cart[id]};});
+ const items=Object.keys(cart).map(id=>{const p=PRODUCTS.find(x=>x.id==id);return{name:p.name,unit:p.unit,qty:cart[id],price:p.price,total:Math.round(p.price*cart[id]*100)/100};});
  lastOrder={no:"—",date:new Date(),items,sub,fee,grand,invLabel,invValue,distKm:(f.dist!=null?f.dist.toFixed(1):null),name,phone,addr,pay:document.getElementById("cPay").value,note:document.getElementById("cNote").value.trim(),changeText:cc.text,loc:mapsLink()};
  function buildAndShow(){
  let msg="طلب جديد — "+CONFIG.storeName+"%0Aرقم الفاتورة: "+lastOrder.no+"%0A----------------%0A";
@@ -459,7 +459,10 @@ render();
 
 <a href="https://wa.me/201152577222?text=%D8%A3%D9%87%D9%84%D9%8B%D8%A7%20%D8%B3%D9%88%D8%A8%D8%B1%20%D9%85%D8%A7%D8%B1%D9%83%D8%AA%20%D8%A7%D9%84%D8%AD%D9%85%D8%AF%D8%8C%20%D8%B9%D9%86%D8%AF%D9%8A%20%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1" target="_blank" aria-label="راسلنا واتساب" title="راسلنا واتساب" style="position:fixed;bottom:86px;inset-inline-end:16px;width:52px;height:52px;border-radius:50%;background:#25d366;color:#fff;font-size:24px;display:flex;align-items:center;justify-content:center;text-decoration:none;box-shadow:0 10px 22px rgba(0,0,0,.3);z-index:70">💬</a>
 <style>
-.citem{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line)}
+.citem{padding:10px 0;border-bottom:1px dashed var(--line)}
+.cname{display:block;font-size:15px;font-weight:800;line-height:1.5}
+.crow2{display:flex;align-items:center;gap:10px;margin-top:5px}
+.crow2 small{flex:1;color:var(--muted);font-weight:700;min-width:0}
 .cinfo{flex:1;min-width:0}
 .cinfo b{display:block;font-size:14.5px;line-height:1.5;font-weight:800}
 .cinfo small{color:var(--muted);font-weight:700}
