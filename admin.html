@@ -292,7 +292,7 @@ function importJSON(input){const file=input.files[0]; if(!file)return;
 function resetCatalog(){if(!confirm("استرجاع الكتالوج الأصلي المدمج؟ كل تعديلات الجهاز هتتمسح."))return;
  localStorage.removeItem("alhamd_catalog"); localStorage.removeItem("alhamd_stock"); location.reload();}
 /* ===== إعدادات المتجر ===== */
-const SETTINGS_DEFAULTS={whatsapp:"201152577222",areaName:"منطقة السوبر ماركت",minOrder:50,minFee:15,includedKm:2,perKm:5,feeCap:"",freeAbove:500,storeLat:"",storeLng:"",pin:"1234",ordersApi:"https://script.google.com/macros/s/AKfycbxWY3xAOp_q8YhlbIXMW8pW6blK5LmrZefORcxKi1q_FVKaDrOWO95t1YndCus-PQxNQg/exec",ordersSheet:"https://docs.google.com/spreadsheets/d/1Sj7kWe6UXZvj-Zi_IrjCkeocnYLRsWbWvI1l7ETvUPo/edit"};
+const SETTINGS_DEFAULTS={whatsapp:"201152577222",areaName:"منطقة السوبر ماركت",minOrder:50,minFee:15,includedKm:2,perKm:5,feeCap:"",freeAbove:500,storeLat:"",storeLng:"",pin:"1234",ordersApi:"https://script.google.com/macros/s/AKfycbxWY3xAOp_q8YhlbIXMW8pW6blK5LmrZefORcxKi1q_FVKaDrOWO95t1YndCus-PQxNQg/exec",ordersSheet:"https://docs.google.com/spreadsheets/d/1Sj7kWe6UXZvj-Zi_IrjCkeocnYLRsWbWYl1l7ETVuPo/edit"};
 function getSettings(){return Object.assign({},SETTINGS_DEFAULTS,JSON.parse(localStorage.getItem("alhamd_settings")||"{}"));}
 function loadSettings(){const s=getSettings();
  stWhatsapp.value=s.whatsapp;stArea.value=s.areaName;stMinOrder.value=s.minOrder;stMinFee.value=s.minFee;stIncludedKm.value=s.includedKm;stPerKm.value=s.perKm;stFeeCap.value=s.feeCap;stFreeAbove.value=s.freeAbove;stLat.value=s.storeLat;stLng.value=s.storeLng;stPin.value=s.pin||"1234";stOrdersApi.value=s.ordersApi||"";stOrdersSheet.value=s.ordersSheet||"";}
